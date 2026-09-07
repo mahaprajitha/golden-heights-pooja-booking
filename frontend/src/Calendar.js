@@ -38,7 +38,10 @@ function Calendar({ bookings }) {
           <div className={`calendar-day ${booked ? "is-booked" : "is-available"}`} key={day} aria-label={`${date}: ${booked ? `booked by ${booked.name}` : "available"}`}>
             <span className="day-number">{day}</span>
             <span className="day-status">{booked ? "Booked" : "Open"}</span>
-            {booked && <span className="booking-name">{booked.name}</span>}
+            {booked && <>
+              {booked.block && booked.unit && <span className="booking-location">{booked.block}-{booked.unit}</span>}
+              <span className="booking-name">{booked.name}</span>
+            </>}
           </div>
         );
       })}
