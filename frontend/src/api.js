@@ -2,7 +2,7 @@ const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 async function request(path, options = {}) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
+  const timeout = setTimeout(() => controller.abort(), 30000);
 
   try {
     const res = await fetch(`${API_URL}${path}`, {
