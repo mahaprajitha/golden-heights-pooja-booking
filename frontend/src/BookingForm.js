@@ -56,7 +56,7 @@ function BookingForm({ setBookings }) {
         <div className="field-row">
           <label>
             Block
-            <input name="block" placeholder="e.g. A" value={form.block} onChange={updateField} required />
+            <input name="block" placeholder="e.g. 1" value={form.block} onChange={updateField} required />
           </label>
           <label>
             Unit
