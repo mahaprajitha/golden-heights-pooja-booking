@@ -5,6 +5,7 @@ function Calendar({ bookings }) {
     const today = new Date();
     return new Date(today.getFullYear(), today.getMonth(), 1);
   });
+  const [selectedBooking, setSelectedBooking] = useState(null);
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const year = visibleMonth.getFullYear();
   const monthIndex = visibleMonth.getMonth();
@@ -35,17 +36,39 @@ function Calendar({ bookings }) {
         const date = `${year}-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
         const booked = bookings[date];
         return (
-          <div className={`calendar-day ${booked ? "is-booked" : "is-available"}`} key={day} aria-label={`${date}: ${booked ? `booked by ${booked.name}` : "available"}`}>
+          <div
+            className={`calendar-day ${booked ? "is-booked" : "is-available"}`}
+            key={day}
+            aria-label={`${date}: ${booked ? `booked by ${booked.name}` : "available"}`}
+            role={booked ? "button" : undefined}
+            tabIndex={booked ? 0 : undefined}
+            onClick={() => booked && setSelectedBooking({ date, ...booked })}
+            onKeyDown={event => {
+              if (booked && (event.key === "Enter" || event.key === " ")) {
+                event.preventDefault();
+                setSelectedBooking({ date, ...booked });
+              }
+            }}
+          >
             <span className="day-number">{day}</span>
             <span className="day-status">{booked ? "Booked" : "Open"}</span>
-            {booked && <>
-              {booked.block && booked.unit && <span className="booking-location">{booked.block}-{booked.unit}</span>}
-              <span className="booking-name">{booked.name}</span>
-            </>}
           </div>
         );
       })}
       </div>
+      {selectedBooking && (
+        <div className="booking-modal-backdrop" role="presentation" onClick={() => setSelectedBooking(null)}>
+          <div className="booking-modal" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title" onClick={event => event.stopPropagation()}>
+            <button className="booking-modal-close" type="button" onClick={() => setSelectedBooking(null)} aria-label="Close booking details">×</button>
+            <p className="eyebrow">Booked date</p>
+            <h3 id="booking-modal-title">{selectedBooking.date}</h3>
+            <p className="booking-modal-name">{selectedBooking.name}</p>
+            {selectedBooking.block && selectedBooking.unit && (
+              <p className="booking-modal-location">{selectedBooking.block}-{selectedBooking.unit}</p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
