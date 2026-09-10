@@ -7,6 +7,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Health check endpoint for keepalive
+app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
 app.use("/booking", bookingRoutes);
 app.use("/admin", adminRoutes);
 

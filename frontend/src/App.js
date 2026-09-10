@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Calendar from "./Calendar";
 import BookingForm from "./BookingForm";
 import Admin from "./Admin";
-import { getBookings } from "./api";
+import { getBookings, startKeepalive } from "./api";
 
 function App() {
   if (window.location.pathname === "/admin") {
@@ -16,6 +16,10 @@ function PublicBooking() {
   const [bookings, setBookings] = useState({});
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
+
+  useEffect(() => {
+    startKeepalive();
+  }, []);
 
   useEffect(() => {
     getBookings()

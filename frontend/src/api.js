@@ -51,3 +51,18 @@ export async function cancelBooking(date) {
     method: "DELETE"
   });
 }
+
+// Keepalive ping to prevent Render free tier cold starts
+export function startKeepalive() {
+  const ping = async () => {
+    try {
+      await fetch(`${API_URL}/health`, { signal: AbortSignal.timeout(5000) });
+    } catch {
+      // Silently fail; keepalive is best-effort
+    }
+  };
+  
+  // Ping immediately on first load, then every 5 minutes
+  ping();
+  setInterval(ping, 5 * 60 * 1000);
+}
