@@ -25,6 +25,7 @@ function DatePicker({ value, onChange }) {
       setVisibleMonth(newMonth);
     }
   };
+  
 
   const handleDateClick = day => {
     const date = new Date(year, monthIndex, day);
