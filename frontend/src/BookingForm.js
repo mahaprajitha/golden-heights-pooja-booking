@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { bookDate } from "./api";
+import DatePicker from "./DatePicker";
 
 function BookingForm({ setBookings }) {
   const [form, setForm] = useState({ date: "", name: "", block: "", unit: "" });
@@ -53,7 +54,10 @@ function BookingForm({ setBookings }) {
       <div className="form-fields">
         <label>
           Pooja date
-          <input name="date" type="date" value={form.date} onChange={updateField} min="2026-09-14" max="2026-10-31" required />
+          <DatePicker value={form.date} onChange={date => {
+            setForm({ ...form, date });
+            setStatus({ type: "", message: "" });
+          }} />
         </label>
         <label>
           Your name
