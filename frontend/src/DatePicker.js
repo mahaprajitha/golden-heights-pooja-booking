@@ -6,7 +6,7 @@ function DatePicker({ value, onChange }) {
   const maxDate = new Date(2026, 9, 31); // Oct 31, 2026
   const [visibleMonth, setVisibleMonth] = useState(() => {
     if (value) {
-      const [year, month, day] = value.split("-");
+      const [year, month, _day] = value.split("-");
       return new Date(year, month - 1, 1);
     }
     return new Date(minDate);
