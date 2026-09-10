@@ -25,9 +25,10 @@ function DatePicker({ value, onChange }) {
       setVisibleMonth(newMonth);
     }
   };
-  
 
-  const handleDateClick = day => {
+
+  const handleDateClick = (day, event) => {
+    event.stopPropagation();
     const date = new Date(year, monthIndex, day);
     if (date >= minDate && date <= maxDate) {
       const dateString = `${year}-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -106,7 +107,7 @@ function DatePicker({ value, onChange }) {
                     key={day}
                     type="button"
                     className={`date-picker-day ${isSelected ? "selected" : ""} ${disabled ? "disabled" : ""}`}
-                    onClick={() => !disabled && handleDateClick(day)}
+                    onClick={(e) => !disabled && handleDateClick(day, e)}
                     disabled={disabled}
                     aria-label={`${date}${disabled ? " (unavailable)" : ""}`}
                   >
