@@ -51,7 +51,10 @@ function DatePicker({ value, onChange }) {
       <button
         type="button"
         className="date-picker-trigger"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
         aria-label="Open date picker"
       >
         {displayValue}
@@ -65,7 +68,10 @@ function DatePicker({ value, onChange }) {
               <button
                 type="button"
                 className="date-picker-nav"
-                onClick={() => changeMonth(-1)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  changeMonth(-1);
+                }}
                 disabled={visibleMonth <= minDate}
                 aria-label="Previous month"
               >
@@ -77,7 +83,10 @@ function DatePicker({ value, onChange }) {
               <button
                 type="button"
                 className="date-picker-nav"
-                onClick={() => changeMonth(1)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  changeMonth(1);
+                }}
                 disabled={
                   new Date(year, monthIndex + 1, 1) >
                   new Date(maxDate.getFullYear(), maxDate.getMonth(), 1)
