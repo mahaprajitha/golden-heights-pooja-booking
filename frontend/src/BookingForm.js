@@ -13,6 +13,12 @@ function BookingForm({ setBookings }) {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    const minDate = "2026-09-14";
+    const maxDate = "2026-10-31";
+    if (form.date < minDate || form.date > maxDate) {
+      setStatus({ type: "error", message: "Bookings are available from September 14 to October 31, 2026." });
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await bookDate(form);
@@ -47,7 +53,7 @@ function BookingForm({ setBookings }) {
       <div className="form-fields">
         <label>
           Pooja date
-          <input name="date" type="date" value={form.date} onChange={updateField} required />
+          <input name="date" type="date" value={form.date} onChange={updateField} min="2026-09-14" max="2026-10-31" required />
         </label>
         <label>
           Your name
