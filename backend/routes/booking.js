@@ -4,6 +4,14 @@ const { db, ref, set, get } = require("../firebase");
 
 router.post("/", async (req, res) => {
   const { date, name, block, unit } = req.body;
+  
+  // Validate date is within 48-day window: Sep 14 - Oct 31, 2026
+  const minDate = "2026-09-14";
+  const maxDate = "2026-10-31";
+  if (date < minDate || date > maxDate) {
+    return res.status(400).json({ message: "Bookings are available from September 14 to October 31, 2026." });
+  }
+  
   const bookingRef = ref(db, `bookings/${date}`);
   const snapshot = await get(bookingRef);
 
