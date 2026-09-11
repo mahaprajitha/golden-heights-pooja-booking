@@ -7,6 +7,7 @@ function Admin() {
 	const [bookings, setBookings] = useState({});
 	const [status, setStatus] = useState({ type: "", message: "" });
 	const [loading, setLoading] = useState(false);
+	const [filterBlock, setFilterBlock] = useState("");
 
 	useEffect(() => {
 		if (!loggedIn) return;
@@ -47,6 +48,39 @@ function Admin() {
 	};
 
 	const bookingEntries = Object.entries(bookings).sort(([first], [second]) => first.localeCompare(second));
+
+	// Generate all dates in 48-day window (Sep 14 - Oct 31, 2026)
+	const generateAllDates = () => {
+		const dates = [];
+		const start = new Date(2026, 8, 14); // Sep 14
+		const end = new Date(2026, 9, 31); // Oct 31
+		for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+			const year = d.getFullYear();
+			const month = String(d.getMonth() + 1).padStart(2, "0");
+			const day = String(d.getDate()).padStart(2, "0");
+			dates.push(`${year}-${month}-${day}`);
+		}
+		return dates;
+	};
+
+	// Get available (unfilled) dates, optionally filtered by block
+	const getAvailableDates = () => {
+		const allDates = generateAllDates();
+		const available = allDates.filter(date => !bookings[date]);
+		
+		if (filterBlock.trim()) {
+			// Show booked dates that exactly match the block filter
+			const bookedWithBlock = bookingEntries.filter(
+				([_, booking]) => booking.block && booking.block.toString() === filterBlock.trim()
+			);
+			return {
+				available: available,
+				bookedWithBlock: bookedWithBlock
+			};
+		}
+		
+		return { available, bookedWithBlock: [] };
+	};
 
 	if (!loggedIn) {
 		return (
@@ -105,6 +139,83 @@ function Admin() {
 				</div>
 				<button className="logout-button" type="button" onClick={() => setLoggedIn(false)}>Log out</button>
 			</header>
+
+			<section className="admin-content panel">
+				<div className="section-heading">
+					<div>
+						<p className="eyebrow">Filters</p>
+						<h2>Search bookings</h2>
+					</div>
+				</div>
+				<div className="admin-filters">
+					<label>
+						Filter by block number
+						<input
+							type="text"
+							placeholder="e.g. 1, 2, 3"
+							value={filterBlock}
+							onChange={e => setFilterBlock(e.target.value)}
+						/>
+					</label>
+				</div>
+			</section>
+
+			{filterBlock.trim() && (() => {
+				const { bookedWithBlock } = getAvailableDates();
+				return (
+					<section className="admin-content panel">
+						<div className="section-heading">
+							<div>
+								<p className="eyebrow">Block: {filterBlock}</p>
+								<h2>Bookings for this block</h2>
+							</div>
+							<span className="booking-count">{bookedWithBlock.length} {bookedWithBlock.length === 1 ? "booking" : "bookings"}</span>
+						</div>
+						{bookedWithBlock.length === 0 ? (
+							<p className="empty-state">No bookings found for block {filterBlock}.</p>
+						) : (
+							<div className="booking-table-wrap">
+								<table className="booking-table">
+									<thead>
+										<tr><th>Date</th><th>Name</th><th>Block</th><th>Unit</th><th><span className="sr-only">Actions</span></th></tr>
+									</thead>
+									<tbody>
+										{bookedWithBlock.map(([date, booking]) => (
+											<tr key={date}>
+												<td><strong>{date}</strong></td>
+												<td>{booking.name}</td>
+												<td>{booking.block}</td>
+												<td>{booking.unit}</td>
+												<td><button className="cancel-button" type="button" onClick={() => handleCancel(date)}>Cancel</button></td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						)}
+					</section>
+				);
+			})()}
+
+			{(() => {
+				const { available } = getAvailableDates();
+				return (
+					<section className="admin-content panel">
+						<div className="section-heading">
+							<div>
+								<p className="eyebrow">Available dates</p>
+								<h2>Unfilled in 48-day window</h2>
+							</div>
+							<span className="booking-count">{available.length} dates</span>
+						</div>
+						<div className="available-dates-grid">
+							{available.map(date => (
+								<div key={date} className="available-date-item">{date}</div>
+							))}
+						</div>
+					</section>
+				);
+			})()}
 
 			<section className="admin-content panel">
 				<div className="section-heading">

@@ -12,11 +12,24 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ message: "Bookings are available from September 14 to October 31, 2026." });
   }
   
+  // Check if date is already booked
   const bookingRef = ref(db, `bookings/${date}`);
   const snapshot = await get(bookingRef);
-
   if (snapshot.exists()) {
     return res.status(400).json({ message: "Date already booked" });
+  }
+
+  // Check if this unit (block-unit) is already booked
+  const allBookingsRef = ref(db, "bookings");
+  const allBookingsSnapshot = await get(allBookingsRef);
+  
+  if (allBookingsSnapshot.exists()) {
+    const allBookings = allBookingsSnapshot.val();
+    for (const existingBooking of Object.values(allBookings)) {
+      if (existingBooking.block === block && existingBooking.unit === unit) {
+        return res.status(400).json({ message: `Unit ${block}-${unit} is already booked for a different date.` });
+      }
+    }
   }
 
   await set(bookingRef, { name, block, unit });
