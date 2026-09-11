@@ -62,7 +62,7 @@ export function startKeepalive() {
     }
   };
   
-  // Ping immediately on first load, then every 5 minutes
+  // Ping immediately on first load, then every 2 minutes (Render sleeps after 15 min inactivity)
   ping();
-  setInterval(ping, 5 * 60 * 1000);
+  setInterval(ping, 2 * 60 * 1000);
 }
