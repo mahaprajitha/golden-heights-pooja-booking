@@ -66,6 +66,7 @@ h2 { margin-bottom: 0; font-size: 27px; font-weight: 400; }
 .form-icon { width: 38px; height: 38px; font-size: 19px; }
 .form-heading { margin-bottom: 12px; }
 .form-intro { margin-bottom: 24px; font-size: 14px; }
+.form-note { margin-top: -18px; margin-bottom: 24px; color: var(--saffron-dark); font-size: 13px; font-style: italic; }
 .form-fields { display: grid; gap: 16px; }
 label { display: grid; gap: 7px; color: var(--ink); font: 700 12px Arial, sans-serif; }
 input { width: 100%; padding: 13px 14px; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 9px; outline: none; font-size: 15px; }
@@ -111,6 +112,9 @@ select:focus { border-color: var(--saffron); box-shadow: 0 0 0 3px rgb(77 157 22
 .logout-button:hover { border-color: var(--saffron); color: var(--saffron-dark); }
 .admin-content { margin: 0 auto; }
 .booking-count { padding: 8px 11px; color: var(--maroon); background: #e6f2fc; border-radius: 20px; font: 700 12px Arial, sans-serif; }
+.heading-actions { display: flex; align-items: center; gap: 12px; }
+.export-button { padding: 10px 14px; color: #fff; background: var(--saffron); border: none; border-radius: 8px; cursor: pointer; font: 700 12px Arial, sans-serif; }
+.export-button:hover { background: var(--saffron-dark); }
 .booking-table-wrap { overflow-x: auto; }
 .booking-table { width: 100%; border-collapse: collapse; font: 14px Arial, sans-serif; }
 .booking-table th { color: var(--muted); font-size: 11px; letter-spacing: .8px; text-align: left; text-transform: uppercase; }

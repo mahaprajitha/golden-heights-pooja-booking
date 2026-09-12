@@ -47,12 +47,40 @@ function Admin() {
 		}
 	};
 
+	const handleExportExcel = () => {
+		const bookingEntries = Object.entries(bookings).sort(([first], [second]) => first.localeCompare(second));
+		
+		// Create CSV content
+		const headers = ["Date", "Name", "Block", "Unit"];
+		const rows = bookingEntries.map(([date, booking]) => [
+			date,
+			booking.name,
+			booking.block,
+			booking.unit
+		]);
+
+		// Convert to CSV
+		const csvContent = [
+			headers.join(","),
+			...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+		].join("\n");
+
+		// Download file
+		const element = document.createElement("a");
+		element.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent));
+		element.setAttribute("download", `Pooja-Bookings-${new Date().toISOString().split("T")[0]}.csv`);
+		element.style.display = "none";
+		document.body.appendChild(element);
+		element.click();
+		document.body.removeChild(element);
+	};
+
 	const bookingEntries = Object.entries(bookings).sort(([first], [second]) => first.localeCompare(second));
 
-	// Generate all dates in 48-day window (Sep 14 - Oct 31, 2026)
+	// Generate all dates in 47-day window (Sep 15 - Oct 31, 2026)
 	const generateAllDates = () => {
 		const dates = [];
-		const start = new Date(2026, 8, 14); // Sep 14
+		const start = new Date(2026, 8, 15); // Sep 15
 		const end = new Date(2026, 9, 31); // Oct 31
 		for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
 			const year = d.getFullYear();
@@ -223,7 +251,10 @@ function Admin() {
 						<p className="eyebrow">Reservations</p>
 						<h2>All bookings</h2>
 					</div>
-					<span className="booking-count">{bookingEntries.length} {bookingEntries.length === 1 ? "booking" : "bookings"}</span>
+					<div className="heading-actions">
+						<span className="booking-count">{bookingEntries.length} {bookingEntries.length === 1 ? "booking" : "bookings"}</span>
+						{bookingEntries.length > 0 && <button className="export-button" type="button" onClick={handleExportExcel}>Export to CSV ⬇</button>}
+					</div>
 				</div>
 				{status.message && <p className={`form-status ${status.type}`} role="status">{status.message}</p>}
 				{loading && <p className="status-message">Loading bookings...</p>}
