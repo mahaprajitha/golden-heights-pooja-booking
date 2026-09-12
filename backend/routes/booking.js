@@ -26,7 +26,8 @@ router.post("/", async (req, res) => {
   if (allBookingsSnapshot.exists()) {
     const allBookings = allBookingsSnapshot.val();
     for (const existingBooking of Object.values(allBookings)) {
-      if (existingBooking.unit === unit) {
+      // Compare unit numbers (convert to string to handle both number and string types)
+      if (String(existingBooking.unit) === String(unit)) {
         return res.status(400).json({ message: `Unit ${unit} is already booked.` });
       }
     }
