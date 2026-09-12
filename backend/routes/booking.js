@@ -19,15 +19,15 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ message: "Date already booked" });
   }
 
-  // Check if this unit (block-unit) is already booked
+  // Check if this unit is already booked (across all blocks)
   const allBookingsRef = ref(db, "bookings");
   const allBookingsSnapshot = await get(allBookingsRef);
   
   if (allBookingsSnapshot.exists()) {
     const allBookings = allBookingsSnapshot.val();
     for (const existingBooking of Object.values(allBookings)) {
-      if (existingBooking.block === block && existingBooking.unit === unit) {
-        return res.status(400).json({ message: `Unit ${block}-${unit} is already booked for a different date.` });
+      if (existingBooking.unit === unit) {
+        return res.status(400).json({ message: `Unit ${unit} is already booked.` });
       }
     }
   }

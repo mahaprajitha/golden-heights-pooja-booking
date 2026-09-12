@@ -70,7 +70,12 @@ function BookingForm({ setBookings }) {
         <div className="field-row">
           <label>
             Block
-            <input name="block" placeholder="e.g. 1" value={form.block} onChange={updateField} required />
+            <select name="block" value={form.block} onChange={updateField} required>
+              <option value="">Select a block</option>
+              <option value="1">Block 1</option>
+              <option value="2">Block 2</option>
+              <option value="3">Block 3</option>
+            </select>
           </label>
           <label>
             Unit

@@ -70,6 +70,8 @@ h2 { margin-bottom: 0; font-size: 27px; font-weight: 400; }
 label { display: grid; gap: 7px; color: var(--ink); font: 700 12px Arial, sans-serif; }
 input { width: 100%; padding: 13px 14px; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 9px; outline: none; font-size: 15px; }
 input:focus { border-color: var(--saffron); box-shadow: 0 0 0 3px rgb(77 157 224 / 18%); }
+select { width: 100%; padding: 13px 14px; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 9px; outline: none; font-size: 15px; cursor: pointer; }
+select:focus { border-color: var(--saffron); box-shadow: 0 0 0 3px rgb(77 157 224 / 18%); }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .form-status { margin: 18px 0 0; padding: 11px 12px; border-radius: 8px; font: 13px/1.4 Arial, sans-serif; }
 .form-status.success { color: var(--green-ink); background: var(--green); }
